@@ -12,14 +12,14 @@ function Dashboard() {
          <h1>Dashboard</h1>
          <h1>Welcome, {fakeUser.name}</h1>
 
-         cards.map((card) => (
+         {cards.map((card) => (
             <div key={card.id}>
                 <h2>{card.title}</h2>
                 <p>{card.text}</p>
             </div>
-         ))
+         ))}
 
     </div>
     )
 }
-export default Dashboard    
+export default Dashboard
