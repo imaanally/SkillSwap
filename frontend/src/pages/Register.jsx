@@ -1,4 +1,14 @@
+import {usestate} from 'react'
 function Register() {
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        password: '',
+    })
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value })
+    }
    return(
    <form>
       <h1>Register</h1>
