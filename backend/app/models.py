@@ -74,6 +74,25 @@ class ExchangeRequest(Base):
     status = Column(String(20), nullable=False, default="pending")
     message = Column(Text)
 
+    sender = relationship(
+        "User",
+        foreign_keys=[sender_id],
+        backref="sent_exchange_requests",
+    )
+    receiver = relationship(
+        "User",
+        foreign_keys=[receiver_id],
+        backref="received_exchange_requests",
+    )
+    offered_skill = relationship(
+        "Skill",
+        foreign_keys=[offered_skill_id],
+    )
+    requested_skill = relationship(
+        "Skill",
+        foreign_keys=[requested_skill_id],
+    )
+
     __table_args__ = (
         CheckConstraint(
             "status IN ('pending', 'accepted', 'rejected')",
