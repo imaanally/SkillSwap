@@ -2,11 +2,19 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.models import ExchangeRequest, Skill, User, UserSkill
+from app.models import (
+    ExchangeRequest,
+    Skill,
+    User,
+    UserSkill,
+    Session as LearningSession,
+)
 from app.schemas import (
     ExchangeRequestCreate,
-    ExchangeRequestResponse,
     ExchangeRequestUpdate,
+    ExchangeRequestResponse,
+    SessionCreate,
+    SessionResponse,
 )
 from app.security import get_current_user
 
@@ -163,3 +171,57 @@ def respond_to_exchange_request(
     db.refresh(exchange_request)
 
     return exchange_request
+
+
+@router.post(
+    "/sessions",
+    response_model=SessionResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+def create_session(
+    data: SessionCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    exchange_request = db.get(
+        ExchangeRequest,
+        data.exchange_request_id,
+    )
+
+    if exchange_request is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Exchange request not found",
+        )
+
+    if current_user.id not in (
+        exchange_request.sender_id,
+        exchange_request.receiver_id,
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You are not a participant in this exchange",
+        )
+
+    if exchange_request.status != "accepted":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Sessions can only be created for accepted exchanges",
+        )
+
+    new_session = LearningSession(
+        exchange_request_id=exchange_request.id,
+        teacher_id=exchange_request.sender_id,
+        learner_id=exchange_request.receiver_id,
+        scheduled_at=data.scheduled_at,
+        duration_minutes=data.duration_minutes,
+        meeting_link=data.meeting_link,
+        notes=data.notes,
+        status="scheduled",
+    )
+
+    db.add(new_session)
+    db.commit()
+    db.refresh(new_session)
+
+    return new_session
