@@ -1,0 +1,224 @@
+
+.marketplace-page {
+  min-height: 100vh;
+  padding: 40px 6%;
+  background-color: #f8f6ff;
+  color: #30264a;
+}
+
+.marketplace-page h1 {
+  margin: 10px 0;
+  font-size: 34px;
+  color: #30264a;
+}
+
+.marketplace-page > p {
+  color: #77718a;
+  margin-bottom: 12px;
+}
+
+.marketplace-page .welcome-text {
+  color: #8b70c9;
+  font-weight: 600;
+}
+
+.marketplace-search {
+  display: flex;
+  gap: 12px;
+  margin: 30px 0 40px;
+  padding: 16px;
+  background: #ffffff;
+  border: 1px solid #eee9f7;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(70, 48, 110, 0.05);
+}
+
+.marketplace-search input,
+.marketplace-search select {
+  flex: 1;
+  min-width: 0;
+  padding: 13px 15px;
+  border: 1px solid #e5def1;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #30264a;
+  font-size: 14px;
+}
+
+.marketplace-search input:focus,
+.marketplace-search select:focus {
+  outline: 2px solid #c9b5ed;
+  border-color: #7952bd;
+}
+
+.marketplace-search button {
+  padding: 13px 24px;
+  border: none;
+  border-radius: 9px;
+  background: #7952bd;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.marketplace-search button:hover {
+  background: #63409f;
+}
+
+.marketplace-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.marketplace-heading h2 {
+  margin: 0;
+  font-size: 22px;
+  color: #30264a;
+}
+
+.marketplace-heading button {
+  border: none;
+  background: transparent;
+  color: #7952bd;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.skill-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 22px;
+}
+
+.skill-card {
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #eee9f7;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(70, 48, 110, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.skill-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 9px 22px rgba(70, 48, 110, 0.10);
+}
+
+.skill-card-header {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 24px;
+}
+
+.skill-card-header h3 {
+  margin: 0 0 5px;
+  color: #30264a;
+  font-size: 17px;
+}
+
+.skill-card-header p {
+  margin: 0;
+  color: #9991a8;
+  font-size: 13px;
+}
+
+.skill-card .user-avatar {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #eee6ff;
+  color: #7952bd;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.teach-skill,
+.learn-skill {
+  margin-bottom: 16px;
+  padding: 14px;
+  border-radius: 10px;
+}
+
+.teach-skill {
+  background: #f2edff;
+}
+
+.learn-skill {
+  background: #f8f6ff;
+}
+
+.teach-skill span,
+.learn-skill span {
+  color: #8b70c9;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.teach-skill h4 {
+  margin: 7px 0 0;
+  color: #30264a;
+  font-size: 16px;
+}
+
+.learn-skill p {
+  margin: 7px 0 0;
+  color: #30264a;
+  font-size: 14px;
+}
+
+.view-profile-button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 5px;
+  border: none;
+  border-radius: 9px;
+  background: #7952bd;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.view-profile-button:hover {
+  background: #63409f;
+}
+
+@media (max-width: 650px) {
+  .marketplace-page {
+    padding: 28px 5%;
+  }
+
+  .marketplace-page h1 {
+    font-size: 27px;
+  }
+
+  .marketplace-search {
+    flex-direction: column;
+    margin-bottom: 30px;
+  }
+
+  .marketplace-search input,
+  .marketplace-search select,
+  .marketplace-search button {
+    width: 100%;
+  }
+
+  .marketplace-heading {
+    align-items: flex-start;
+  }
+
+  .marketplace-heading h2 {
+    font-size: 19px;
+  }
+
+  .skill-card-grid {
+    grid-template-columns: 1fr;
+  }
+}

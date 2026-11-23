@@ -1,6 +1,6 @@
 import { useState } from "react";
 import SkillCard from "../components/SkillCard";
-import "../styles/pages.css";
+import "../styles/marketplace.css";
 
 function Marketplace() {
   const [search, setSearch] = useState("");
@@ -48,7 +48,8 @@ function Marketplace() {
   const filteredPeople = people.filter((person) => {
     const matchesSearch =
       person.name.toLowerCase().includes(search.toLowerCase()) ||
-      person.teachSkill.toLowerCase().includes(search.toLowerCase());
+      person.teachSkill.toLowerCase().includes(search.toLowerCase()) ||
+      person.learnSkill.toLowerCase().includes(search.toLowerCase());
 
     const matchesCategory =
       category === "All categories" || person.teachSkill === category;
