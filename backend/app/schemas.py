@@ -99,3 +99,17 @@ class SessionCreate(BaseModel):
     duration_minutes: int = Field(default=60, gt=0)
     meeting_link: str | None = None
     notes: str | None = None
+
+
+class SessionResponse(BaseModel):
+    id: int
+    exchange_request_id: int
+    teacher_id: int
+    learner_id: int
+    scheduled_at: datetime
+    duration_minutes: int
+    meeting_link: str | None = None
+    notes: str | None = None
+    status: str
+
+    model_config = ConfigDict(from_attributes=True)
