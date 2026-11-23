@@ -92,3 +92,21 @@ def create_exchange_request(
     db.refresh(exchange_request)
 
     return exchange_request
+
+
+@router.get("/requests", response_model=list[ExchangeRequestResponse])
+def get_exchange_requests(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    requests = (
+        db.query(ExchangeRequest)
+        .filter(
+            (ExchangeRequest.sender_id == current_user.id)
+            | (ExchangeRequest.receiver_id == current_user.id)
+        )
+        .order_by(ExchangeRequest.id.desc())
+        .all()
+    )
+
+    return requests
