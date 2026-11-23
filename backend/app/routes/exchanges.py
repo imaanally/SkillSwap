@@ -8,6 +8,7 @@ from app.models import (
     User,
     UserSkill,
     Session as LearningSession,
+    Review,
 )
 from app.schemas import (
     ExchangeRequestCreate,
@@ -16,6 +17,8 @@ from app.schemas import (
     SessionCreate,
     SessionResponse,
     SessionUpdate,
+    ReviewCreate,
+    ReviewResponse,
 )
 from app.security import get_current_user
 
@@ -282,3 +285,72 @@ def update_session(
     db.refresh(learning_session)
 
     return learning_session
+
+
+@router.post(
+    "/reviews",
+    response_model=ReviewResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+def create_review(
+    data: ReviewCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    learning_session = db.get(LearningSession, data.session_id)
+
+    if learning_session is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Session not found",
+        )
+
+    if current_user.id not in (
+        learning_session.teacher_id,
+        learning_session.learner_id,
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only session participants can leave a review",
+        )
+
+    if learning_session.status != "completed":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Reviews can only be submitted for completed sessions",
+        )
+
+    existing_review = (
+        db.query(Review)
+        .filter_by(
+            session_id=data.session_id,
+            reviewer_id=current_user.id,
+        )
+        .first()
+    )
+
+    if existing_review:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="You have already reviewed this session",
+        )
+
+    reviewee_id = (
+        learning_session.learner_id
+        if current_user.id == learning_session.teacher_id
+        else learning_session.teacher_id
+    )
+
+    review = Review(
+        session_id=data.session_id,
+        reviewer_id=current_user.id,
+        reviewee_id=reviewee_id,
+        rating=data.rating,
+        comment=data.comment,
+    )
+
+    db.add(review)
+    db.commit()
+    db.refresh(review)
+
+    return review
