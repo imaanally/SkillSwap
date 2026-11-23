@@ -7,3 +7,8 @@ app.add_middleware(
     allow_origins=["http://localhost:5173"],
     allow_methods=["*"], allow_headers=["*"], allow_credentials=True,
 )
+
+
+@app.get("/")
+def root():
+    return {"message": "SkillSwap API is running"}
