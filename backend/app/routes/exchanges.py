@@ -110,3 +110,25 @@ def get_exchange_requests(
     )
 
     return requests
+
+
+def get_request_for_receiver(
+    request_id: int,
+    db: Session,
+    current_user: User,
+):
+    exchange_request = db.get(ExchangeRequest, request_id)
+
+    if exchange_request is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Exchange request not found",
+        )
+
+    if exchange_request.receiver_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only the recipient can respond to this request",
+        )
+
+    return exchange_request
