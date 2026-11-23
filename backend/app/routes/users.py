@@ -6,8 +6,19 @@ from app.schemas import UserOut
 from app.security import get_current_user
 
 router = APIRouter(prefix="/api/users", tags=["users"])
+
+
 @router.get("", response_model=list[UserOut])
 def list_users(skill: str | None = None, db: Session = Depends(get_db)):
     query = db.query(User)
     if skill:
         query = query.join(UserSkill).join(Skill).filter(Skill.name.ilike(f"%{skill}%"), UserSkill.type == "teach")
+    return query.distinct().all()
+
+
+@router.get("/{user_id}", response_model=UserOut)
+def get_user(user_id: int, db: Session = Depends(get_db)):
+    user = db.get(User, user_id)
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return user
