@@ -61,3 +61,22 @@ class UserSkill(Base):
         UniqueConstraint("user_id", "skill_id", "type", name="unique_user_skill_type"),
         CheckConstraint("type IN ('teach', 'learn')", name="check_user_skill_type"),
     )
+
+
+class ExchangeRequest(Base):
+    __tablename__ = "exchange_requests"
+
+    id = Column(Integer, primary_key=True)
+    sender_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    receiver_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    offered_skill_id = Column(Integer, ForeignKey("skills.id"), nullable=False)
+    requested_skill_id = Column(Integer, ForeignKey("skills.id"), nullable=False)
+    status = Column(String(20), nullable=False, default="pending")
+    message = Column(Text)
+
+    __table_args__ = (
+        CheckConstraint(
+            "status IN ('pending', 'accepted', 'rejected')",
+            name="check_exchange_status",
+        ),
+    )
