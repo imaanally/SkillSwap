@@ -130,3 +130,7 @@ class ReviewResponse(BaseModel):
     comment: str | None = None
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class SessionUpdate(BaseModel):
+    status: Literal["completed", "cancelled"]

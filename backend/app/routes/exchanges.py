@@ -15,6 +15,7 @@ from app.schemas import (
     ExchangeRequestResponse,
     SessionCreate,
     SessionResponse,
+    SessionUpdate,
 )
 from app.security import get_current_user
 
@@ -243,3 +244,41 @@ def get_sessions(
     )
 
     return sessions
+
+
+@router.put("/sessions/{session_id}", response_model=SessionResponse)
+def update_session(
+    session_id: int,
+    data: SessionUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    learning_session = db.get(LearningSession, session_id)
+
+    if learning_session is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Session not found",
+        )
+
+    if current_user.id not in (
+        learning_session.teacher_id,
+        learning_session.learner_id,
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You are not a participant in this session",
+        )
+
+    if learning_session.status != "scheduled":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Only scheduled sessions can be updated",
+        )
+
+    learning_session.status = data.status
+
+    db.commit()
+    db.refresh(learning_session)
+
+    return learning_session
