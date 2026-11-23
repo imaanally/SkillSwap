@@ -45,7 +45,8 @@ class UserSkillOut(BaseModel):
     type: str
     skill: SkillOut
 
-    class TokenOut(BaseModel):
+
+class TokenOut(BaseModel):
     access_token: str
     token_type: str = "bearer"
     user: UserOut
