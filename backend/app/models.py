@@ -6,6 +6,7 @@ from sqlalchemy import (
     Integer,
     String,
     Text,
+    DateTime,
     ForeignKey,
     UniqueConstraint,
     CheckConstraint,
@@ -75,27 +76,44 @@ class ExchangeRequest(Base):
     message = Column(Text)
 
     sender = relationship(
-        "User",
-        foreign_keys=[sender_id],
-        backref="sent_exchange_requests",
+        "User", foreign_keys=[sender_id], backref="sent_exchange_requests"
     )
     receiver = relationship(
-        "User",
-        foreign_keys=[receiver_id],
-        backref="received_exchange_requests",
+        "User", foreign_keys=[receiver_id], backref="received_exchange_requests"
     )
-    offered_skill = relationship(
-        "Skill",
-        foreign_keys=[offered_skill_id],
-    )
-    requested_skill = relationship(
-        "Skill",
-        foreign_keys=[requested_skill_id],
-    )
+    offered_skill = relationship("Skill", foreign_keys=[offered_skill_id])
+    requested_skill = relationship("Skill", foreign_keys=[requested_skill_id])
 
     __table_args__ = (
         CheckConstraint(
             "status IN ('pending', 'accepted', 'rejected')",
             name="check_exchange_status",
+        ),
+    )
+
+
+class Session(Base):
+    __tablename__ = "sessions"
+
+    id = Column(Integer, primary_key=True)
+    exchange_request_id = Column(
+        Integer, ForeignKey("exchange_requests.id"), nullable=False
+    )
+    teacher_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    learner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    scheduled_at = Column(DateTime, nullable=False)
+    duration_minutes = Column(Integer, nullable=False, default=60)
+    meeting_link = Column(String(255))
+    notes = Column(Text)
+    status = Column(String(20), nullable=False, default="scheduled")
+
+    __table_args__ = (
+        CheckConstraint(
+            "status IN ('scheduled', 'completed', 'cancelled')",
+            name="check_session_status",
+        ),
+        CheckConstraint(
+            "duration_minutes > 0",
+            name="check_session_duration",
         ),
     )
