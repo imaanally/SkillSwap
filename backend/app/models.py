@@ -107,6 +107,14 @@ class Session(Base):
     notes = Column(Text)
     status = Column(String(20), nullable=False, default="scheduled")
 
+    exchange_request = relationship("ExchangeRequest", backref="sessions")
+    teacher = relationship(
+        "User", foreign_keys=[teacher_id], backref="teaching_sessions"
+    )
+    learner = relationship(
+        "User", foreign_keys=[learner_id], backref="learning_sessions"
+    )
+
     __table_args__ = (
         CheckConstraint(
             "status IN ('scheduled', 'completed', 'cancelled')",
