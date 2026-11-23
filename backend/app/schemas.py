@@ -22,7 +22,6 @@ class UserOut(BaseModel):
     email: EmailStr
     bio: str | None = None
 
-    
 
 class SkillOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -50,3 +49,8 @@ class TokenOut(BaseModel):
     access_token: str
     token_type: str = "bearer"
     user: UserOut
+
+
+class UserUpdate(BaseModel):
+    name: str | None = Field(default=None, min_length=1, max_length=100)
+    bio: str | None = None
