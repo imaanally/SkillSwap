@@ -91,3 +91,11 @@ class ExchangeRequestResponse(BaseModel):
     message: str | None = None
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class SessionCreate(BaseModel):
+    exchange_request_id: int
+    scheduled_at: datetime
+    duration_minutes: int = Field(default=60, gt=0)
+    meeting_link: str | None = None
+    notes: str | None = None
