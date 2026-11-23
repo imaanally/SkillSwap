@@ -225,3 +225,21 @@ def create_session(
     db.refresh(new_session)
 
     return new_session
+
+
+@router.get("/sessions", response_model=list[SessionResponse])
+def get_sessions(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    sessions = (
+        db.query(LearningSession)
+        .filter(
+            (LearningSession.teacher_id == current_user.id)
+            | (LearningSession.learner_id == current_user.id)
+        )
+        .order_by(LearningSession.scheduled_at.desc())
+        .all()
+    )
+
+    return sessions
