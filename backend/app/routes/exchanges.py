@@ -3,7 +3,11 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models import ExchangeRequest, Skill, User, UserSkill
-from app.schemas import ExchangeRequestCreate, ExchangeRequestResponse
+from app.schemas import (
+    ExchangeRequestCreate,
+    ExchangeRequestResponse,
+    ExchangeRequestUpdate,
+)
 from app.security import get_current_user
 
 router = APIRouter(prefix="/api", tags=["Exchanges"])
@@ -130,5 +134,32 @@ def get_request_for_receiver(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Only the recipient can respond to this request",
         )
+
+    return exchange_request
+
+
+@router.put("/requests/{request_id}", response_model=ExchangeRequestResponse)
+def respond_to_exchange_request(
+    request_id: int,
+    data: ExchangeRequestUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    exchange_request = get_request_for_receiver(
+        request_id,
+        db,
+        current_user,
+    )
+
+    if exchange_request.status != "pending":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="This request has already been responded to",
+        )
+
+    exchange_request.status = data.status
+
+    db.commit()
+    db.refresh(exchange_request)
 
     return exchange_request
