@@ -120,8 +120,23 @@ class Session(Base):
             "status IN ('scheduled', 'completed', 'cancelled')",
             name="check_session_status",
         ),
-        CheckConstraint(
-            "duration_minutes > 0",
-            name="check_session_duration",
+        CheckConstraint("duration_minutes > 0", name="check_session_duration"),
+    )
+
+
+class Review(Base):
+    __tablename__ = "reviews"
+
+    id = Column(Integer, primary_key=True)
+    session_id = Column(Integer, ForeignKey("sessions.id"), nullable=False)
+    reviewer_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    reviewee_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    rating = Column(Integer, nullable=False)
+    comment = Column(Text)
+
+    __table_args__ = (
+        CheckConstraint("rating >= 1 AND rating <= 5", name="check_review_rating"),
+        UniqueConstraint(
+            "session_id", "reviewer_id", name="unique_review_per_participant"
         ),
     )
