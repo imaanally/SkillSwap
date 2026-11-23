@@ -113,3 +113,9 @@ class SessionResponse(BaseModel):
     status: str
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class ReviewCreate(BaseModel):
+    session_id: int
+    rating: int = Field(ge=1, le=5)
+    comment: str | None = None
