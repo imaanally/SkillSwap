@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import FRONTEND_URL
-from app.routes import auth, users
+from app.routes import auth, users, skills
 
 app = FastAPI(title="SkillSwap API")
 app.add_middleware(
@@ -11,6 +11,7 @@ app.add_middleware(
 )
 app.include_router(auth.router)
 app.include_router(users.router)
+app.include_router(skills.router)
 
 
 @app.get("/")
