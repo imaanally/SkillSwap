@@ -119,3 +119,14 @@ class ReviewCreate(BaseModel):
     session_id: int
     rating: int = Field(ge=1, le=5)
     comment: str | None = None
+
+
+class ReviewResponse(BaseModel):
+    id: int
+    session_id: int
+    reviewer_id: int
+    reviewee_id: int
+    rating: int
+    comment: str | None = None
+
+    model_config = ConfigDict(from_attributes=True)
