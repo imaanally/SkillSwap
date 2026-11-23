@@ -134,6 +134,12 @@ class Review(Base):
     rating = Column(Integer, nullable=False)
     comment = Column(Text)
 
+    session = relationship("Session", backref="reviews")
+    reviewer = relationship("User", foreign_keys=[reviewer_id], backref="reviews_given")
+    reviewee = relationship(
+        "User", foreign_keys=[reviewee_id], backref="reviews_received"
+    )
+
     __table_args__ = (
         CheckConstraint("rating >= 1 AND rating <= 5", name="check_review_rating"),
         UniqueConstraint(
