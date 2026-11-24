@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 function Login() {
   const [formData, setFormData] = useState({
     email: '',
@@ -6,6 +8,8 @@ function Login() {
   })
   const [error, setError] = useState('')
 
+const { login } = useAuth()
+const navigate = useNavigate()
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
@@ -17,7 +21,8 @@ function Login() {
       return
     }
     setError('')
-    console.log('Login:', formData) 
+     login({ name: 'Jane Doe', email: formData.email })
+     navigate('/dashboard')
   }
 
   return (
@@ -32,3 +37,4 @@ function Login() {
 }
 
 export default Login
+
