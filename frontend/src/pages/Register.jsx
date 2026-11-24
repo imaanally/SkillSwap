@@ -1,4 +1,5 @@
 import {useState} from 'react'
+import { useNavigate } from 'react-router-dom'
 function Register() {
     const [formData, setFormData] = useState({
         name: '',
@@ -7,6 +8,7 @@ function Register() {
     })
 
     const [error, setError] = useState('')
+    const navigate = useNavigate()
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -23,7 +25,7 @@ function Register() {
              return
          }
          setError('')
-         console.log('Register:', formData)
+         navigate('/login')
      }
    return(
    <form onSubmit={handleSubmit}>
