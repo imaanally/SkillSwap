@@ -73,10 +73,8 @@
   font-weight: 600;
 }
 
-.nav-icon {
-  width: 20px;
-  font-size: 18px;
-  text-align: center;
+.nav-item svg {
+  flex-shrink: 0;
 }
 
 .keep-growing-card {
@@ -168,4 +166,23 @@
   top: 0;
   height: 100vh;
   align-self: flex-start;
+}
+
+
+.sidebar-logo {
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.user-avatar-header {
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.user-avatar-header:hover {
+  opacity: 0.8;
 }
