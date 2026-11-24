@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import { useNavigate } from 'react-router-dom'
+import {useNavigate } from 'react-router-dom'
 function Register() {
     const [formData, setFormData] = useState({
         name: '',
