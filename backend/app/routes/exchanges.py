@@ -94,6 +94,39 @@ def create_exchange_request(
             detail="The receiver must list the requested skill as a skill they teach",
         )
 
+    # Ensure both users have listed the skill they want to learn.
+    sender_wants_skill = (
+        db.query(UserSkill)
+        .filter_by(
+            user_id=current_user.id,
+            skill_id=data.requested_skill_id,
+            type="learn",
+        )
+        .first()
+    )
+
+    receiver_wants_skill = (
+        db.query(UserSkill)
+        .filter_by(
+            user_id=data.receiver_id,
+            skill_id=data.offered_skill_id,
+            type="learn",
+        )
+        .first()
+    )
+
+    if sender_wants_skill is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="You must list the requested skill as a skill you want to learn",
+        )
+
+    if receiver_wants_skill is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The receiver must list the offered skill as a skill they want to learn",
+        )
+
     exchange_request = ExchangeRequest(
         sender_id=current_user.id,
         receiver_id=data.receiver_id,
@@ -353,7 +386,7 @@ def create_review(
         else learning_session.teacher_id
     )
 
-    # Prevent users from reviewing themselves
+    # Prevent users from reviewing themselves.
     if reviewee_id == current_user.id:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
