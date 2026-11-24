@@ -511,3 +511,32 @@ def get_session(
         )
 
     return learning_session
+
+
+@router.get(
+    "/requests/{request_id}",
+    response_model=ExchangeRequestResponse,
+)
+def get_exchange_request(
+    request_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    exchange_request = db.get(ExchangeRequest, request_id)
+
+    if exchange_request is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Exchange request not found",
+        )
+
+    if current_user.id not in (
+        exchange_request.sender_id,
+        exchange_request.receiver_id,
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You are not a participant in this exchange request",
+        )
+
+    return exchange_request
