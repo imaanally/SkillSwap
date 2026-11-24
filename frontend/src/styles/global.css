@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@import "./pages.css";
+
+@theme {
+  --color-primary: #4f46e5;
+}
