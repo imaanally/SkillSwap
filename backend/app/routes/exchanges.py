@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -451,3 +452,36 @@ def get_user_reviews(
     )
 
     return reviews
+
+
+@router.get("/reviews/{user_id}/summary")
+def get_user_review_summary(
+    user_id: int,
+    db: Session = Depends(get_db),
+):
+    user = db.get(User, user_id)
+
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found",
+        )
+
+    summary = (
+        db.query(
+            func.avg(Review.rating).label("average_rating"),
+            func.count(Review.id).label("total_reviews"),
+        )
+        .filter(Review.reviewee_id == user_id)
+        .first()
+    )
+
+    return {
+        "user_id": user_id,
+        "average_rating": (
+            round(float(summary.average_rating), 2)
+            if summary.average_rating is not None
+            else 0
+        ),
+        "total_reviews": summary.total_reviews,
+    }
