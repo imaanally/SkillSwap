@@ -90,7 +90,15 @@ function Marketplace() {
 
       <div className="marketplace-heading">
         <h2>A few people to learn with</h2>
-        <button type="button">See everyone →</button>
+        <button
+          type="button"
+          onClick={() => {
+            setSearch("");
+            setCategory("All categories");
+          }}
+        >
+          See everyone →
+        </button>
       </div>
 
       <div className="skill-card-grid">
