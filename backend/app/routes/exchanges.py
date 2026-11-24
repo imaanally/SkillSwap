@@ -485,3 +485,29 @@ def get_user_review_summary(
         ),
         "total_reviews": summary.total_reviews,
     }
+
+
+@router.get("/sessions/{session_id}", response_model=SessionResponse)
+def get_session(
+    session_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    learning_session = db.get(LearningSession, session_id)
+
+    if learning_session is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Session not found",
+        )
+
+    if current_user.id not in (
+        learning_session.teacher_id,
+        learning_session.learner_id,
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You are not a participant in this session",
+        )
+
+    return learning_session
