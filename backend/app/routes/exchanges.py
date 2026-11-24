@@ -354,3 +354,29 @@ def create_review(
     db.refresh(review)
 
     return review
+
+
+@router.get(
+    "/reviews/{user_id}",
+    response_model=list[ReviewResponse],
+)
+def get_user_reviews(
+    user_id: int,
+    db: Session = Depends(get_db),
+):
+    user = db.get(User, user_id)
+
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found",
+        )
+
+    reviews = (
+        db.query(Review)
+        .filter(Review.reviewee_id == user_id)
+        .order_by(Review.id.desc())
+        .all()
+    )
+
+    return reviews
