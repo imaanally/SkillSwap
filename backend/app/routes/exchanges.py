@@ -353,6 +353,13 @@ def create_review(
         else learning_session.teacher_id
     )
 
+    # Prevent users from reviewing themselves
+    if reviewee_id == current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="You cannot review yourself",
+        )
+
     review = Review(
         session_id=data.session_id,
         reviewer_id=current_user.id,
