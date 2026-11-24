@@ -127,6 +127,25 @@ def create_exchange_request(
             detail="The receiver must list the offered skill as a skill they want to learn",
         )
 
+    # Prevent duplicate pending requests for the same exchange.
+    existing_request = (
+        db.query(ExchangeRequest)
+        .filter_by(
+            sender_id=current_user.id,
+            receiver_id=data.receiver_id,
+            offered_skill_id=data.offered_skill_id,
+            requested_skill_id=data.requested_skill_id,
+            status="pending",
+        )
+        .first()
+    )
+
+    if existing_request is not None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="You already have a pending request for this exchange",
+        )
+
     exchange_request = ExchangeRequest(
         sender_id=current_user.id,
         receiver_id=data.receiver_id,
