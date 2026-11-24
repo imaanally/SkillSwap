@@ -213,6 +213,18 @@ def create_session(
             detail="Sessions can only be created for accepted exchanges",
         )
 
+    # Prevent duplicate scheduled sessions for the same exchange.
+    if (
+        db.query(LearningSession)
+        .filter_by(exchange_request_id=exchange_request.id)
+        .filter(LearningSession.status == "scheduled")
+        .first()
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="This exchange already has a scheduled session",
+        )
+
     new_session = LearningSession(
         exchange_request_id=exchange_request.id,
         teacher_id=exchange_request.sender_id,
