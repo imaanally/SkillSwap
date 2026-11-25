@@ -1,49 +1,12 @@
+
 import { useState } from "react";
 import SkillCard from "../components/SkillCard";
+import people from "../data/people";
 import "../styles/marketplace.css";
 
 function Marketplace() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All categories");
-
-  const people = [
-    {
-      id: 1,
-      name: "Amina Mohamed",
-      teachSkill: "Graphic Design",
-      learnSkill: "Python",
-    },
-    {
-      id: 2,
-      name: "Hassan K.",
-      teachSkill: "Python",
-      learnSkill: "Excel",
-    },
-    {
-      id: 3,
-      name: "Mika K.",
-      teachSkill: "Photography",
-      learnSkill: "Canva",
-    },
-    {
-      id: 4,
-      name: "Fatima A.",
-      teachSkill: "Baking",
-      learnSkill: "Marketing",
-    },
-    {
-      id: 5,
-      name: "Yusuf O.",
-      teachSkill: "Excel",
-      learnSkill: "Photography",
-    },
-    {
-      id: 6,
-      name: "Sara N.",
-      teachSkill: "Illustration",
-      learnSkill: "Arabic",
-    },
-  ];
 
   const filteredPeople = people.filter((person) => {
     const matchesSearch =
@@ -64,7 +27,6 @@ function Marketplace() {
       </p>
 
       <h1>Find your next skill swap</h1>
-
       <p>Search for a skill, meet a person, start learning.</p>
 
       <div className="marketplace-search">
@@ -104,12 +66,7 @@ function Marketplace() {
       <div className="skill-card-grid">
         {filteredPeople.length > 0 ? (
           filteredPeople.map((person) => (
-            <SkillCard
-              key={person.id}
-              name={person.name}
-              teachSkill={person.teachSkill}
-              learnSkill={person.learnSkill}
-            />
+            <SkillCard key={person.id} person={person} />
           ))
         ) : (
           <p>No matching people found.</p>
@@ -120,3 +77,4 @@ function Marketplace() {
 }
 
 export default Marketplace;
+

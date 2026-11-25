@@ -8,6 +8,7 @@ import Profile from "./pages/Profile";
 import Marketplace from "./pages/Marketplace";
 import Requests from "./pages/Requests";
 import Sessions from "./pages/Sessions";
+import MemberProfile from "./pages/MemberProfile";
 
 import AppShell from "./components/AppShell";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -19,7 +20,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
 
-      {/* Protected routes */}
+      {/* Protected dashboard */}
       <Route
         path="/dashboard"
         element={
@@ -29,6 +30,7 @@ function App() {
         }
       />
 
+      {/* Protected personal profile */}
       <Route
         path="/profile"
         element={
@@ -38,6 +40,17 @@ function App() {
         }
       />
 
+      {/* Other members' profiles */}
+      <Route
+        path="/members/:id"
+        element={
+          <ProtectedRoute>
+            <MemberProfile />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Marketplace */}
       <Route
         path="/marketplace"
         element={
@@ -49,6 +62,7 @@ function App() {
         }
       />
 
+      {/* Requests */}
       <Route
         path="/requests"
         element={
@@ -60,6 +74,7 @@ function App() {
         }
       />
 
+      {/* Sessions */}
       <Route
         path="/sessions"
         element={
@@ -71,7 +86,7 @@ function App() {
         }
       />
 
-      {/* Default route */}
+      {/* Default routes */}
       <Route path="/" element={<Navigate to="/dashboard" replace />} />
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>

@@ -1,11 +1,16 @@
-function SkillCard({ name, teachSkill, learnSkill }) {
+
+import { Link } from "react-router-dom";
+
+function SkillCard({ person }) {
+  const { id, name, location, teachSkill, learnSkill } = person;
+
   return (
     <div className="skill-card">
       <div className="skill-card-header">
         <div className="user-avatar">{name.charAt(0)}</div>
         <div>
           <h3>{name}</h3>
-          <p>1 skill · Nairobi</p>
+          <p>1 skill · {location}</p>
         </div>
       </div>
 
@@ -19,9 +24,15 @@ function SkillCard({ name, teachSkill, learnSkill }) {
         <p>{learnSkill}</p>
       </div>
 
-      <button className="view-profile-button">View profile</button>
+      <Link
+        to={`/members/${id}`}
+        className="view-profile-button"
+      >
+        View profile
+      </Link>
     </div>
   );
 }
 
 export default SkillCard;
+
