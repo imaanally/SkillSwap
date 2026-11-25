@@ -1,43 +1,82 @@
-import { useState } from "react";
-import Navbar from "./components/Navbar";
+
+import { Routes, Route, Navigate } from "react-router-dom";
+
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import Profile from "./pages/Profile";
 import Marketplace from "./pages/Marketplace";
 import Requests from "./pages/Requests";
 import Sessions from "./pages/Sessions";
 
+import AppShell from "./components/AppShell";
+import ProtectedRoute from "./components/ProtectedRoute";
+
 function App() {
-  const [activePage, setActivePage] = useState("Marketplace");
-
-  function renderPage() {
-    switch (activePage) {
-      case "Home":
-        return <h1>Home</h1>;
-
-      case "Marketplace":
-        return <Marketplace />;
-
-      case "My requests":
-        return <Requests />;
-
-      case "Sessions":
-        return <Sessions />;
-
-      case "My profile":
-        return <h1>My Profile</h1>;
-
-      default:
-        return <Marketplace />;
-    }
-  }
-
   return (
-    <Navbar
-      activePage={activePage}
-      onNavigate={setActivePage}
-      userName="Imaan Ali"
-    >
-      {renderPage()}
-    </Navbar>
+    <Routes>
+      {/* Public routes */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+
+      {/* Protected routes */}
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/marketplace"
+        element={
+          <ProtectedRoute>
+            <AppShell>
+              <Marketplace />
+            </AppShell>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/requests"
+        element={
+          <ProtectedRoute>
+            <AppShell>
+              <Requests />
+            </AppShell>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/sessions"
+        element={
+          <ProtectedRoute>
+            <AppShell>
+              <Sessions />
+            </AppShell>
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Default route */}
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+    </Routes>
   );
 }
 
 export default App;
+
