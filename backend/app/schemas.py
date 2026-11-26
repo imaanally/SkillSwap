@@ -57,6 +57,14 @@ class UserSkillOut(BaseModel):
     type: str
     skill: SkillOut
 
+class MarketplaceUserOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    name: str
+    bio: str | None = None
+    user_skills: list[UserSkillOut] = []
+
 
 # Token and user update schemas
 

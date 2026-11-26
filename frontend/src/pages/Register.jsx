@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthSidePanel from "../components/AuthSidePanel";
-import { registerUser } from "../services/api";
+import { useAuth } from "../context/AuthContext";
+import { registerUser, loginUser } from "../services/api";
 
 function Register() {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -61,7 +63,13 @@ function Register() {
         bio: formData.bio.trim() || null,
       });
 
-      navigate("/login");
+      const response = await loginUser({
+        email: formData.email.trim(),
+        password: formData.password,
+      });
+
+      login(response.user, response.access_token);
+      navigate("/dashboard");
     } catch (err) {
       setError(err.message);
     } finally {

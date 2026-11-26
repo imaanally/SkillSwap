@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import AppShell from "../components/AppShell";
@@ -12,14 +11,11 @@ function Profile() {
   const [formData, setFormData] = useState({
     name: user?.name || "",
     email: user?.email || "",
-    bio:
-      user?.bio ||
-      "I love learning practical skills and meeting people who are generous with what they know. Currently exploring design, tech and creative projects.",
-    location: user?.location || "Nairobi",
-    availability:
-      user?.availability || "Weekday evenings and Saturday mornings",
-    skillsOffered: ["Canva design", "Excel basics"],
-    skillsWanted: ["Python", "Graphic design", "Photography"],
+    bio: user?.bio || "",
+    location: user?.location || "",
+    availability: user?.availability || "",
+    skillsOffered: user?.skillsOffered || [],
+    skillsWanted: user?.skillsWanted || [],
   });
 
   const handleChange = (e) => {
@@ -38,6 +34,8 @@ function Profile() {
       bio: formData.bio,
       location: formData.location,
       availability: formData.availability,
+      skillsOffered: formData.skillsOffered,
+      skillsWanted: formData.skillsWanted,
     });
 
     setIsEditing(false);
@@ -47,14 +45,11 @@ function Profile() {
     setFormData({
       name: user?.name || "",
       email: user?.email || "",
-      bio:
-        user?.bio ||
-        "I love learning practical skills and meeting people who are generous with what they know. Currently exploring design, tech and creative projects.",
-      location: user?.location || "Nairobi",
-      availability:
-        user?.availability || "Weekday evenings and Saturday mornings",
-      skillsOffered: ["Canva design", "Excel basics"],
-      skillsWanted: ["Python", "Graphic design", "Photography"],
+      bio: user?.bio || "",
+      location: user?.location || "",
+      availability: user?.availability || "",
+      skillsOffered: user?.skillsOffered || [],
+      skillsWanted: user?.skillsWanted || [],
     });
 
     setIsEditing(false);
@@ -69,15 +64,13 @@ function Profile() {
 
       <section className="profile-head">
         <div className="profile-id">
-          <div className="profile-avatar">
-            {getInitials(formData.name)}
-          </div>
+          <div className="profile-avatar">{getInitials(formData.name)}</div>
 
           <div>
-            <h2 className="profile-name">{formData.name}</h2>
+            <h2 className="profile-name">{formData.name || "Your name"}</h2>
             <p className="profile-tag">Skill explorer</p>
             <p className="profile-meta">
-              Curious learner • {formData.location} • Here to teach and grow
+              {formData.location || "Location not added yet"}
             </p>
           </div>
         </div>
@@ -92,6 +85,19 @@ function Profile() {
           </button>
         )}
       </section>
+
+      {!isEditing && (
+        <section className="ui-card">
+          <h2 className="ui-card-title">
+            Welcome to your SkillSwap profile! 💗
+          </h2>
+          <p className="ui-card-text">
+            Your profile is just getting started. Add a bio, location,
+            availability and skills to help other members discover you and find
+            great skill exchanges.
+          </p>
+        </section>
+      )}
 
       {isEditing ? (
         <form onSubmit={handleSave}>
@@ -140,6 +146,7 @@ function Profile() {
                   name="bio"
                   className="field-input"
                   rows={4}
+                  placeholder="Tell the community a little about yourself..."
                   value={formData.bio}
                   onChange={handleChange}
                 />
@@ -153,6 +160,7 @@ function Profile() {
                   id="location"
                   name="location"
                   className="field-input"
+                  placeholder="e.g. Nairobi"
                   value={formData.location}
                   onChange={handleChange}
                 />
@@ -166,6 +174,7 @@ function Profile() {
                   id="availability"
                   name="availability"
                   className="field-input"
+                  placeholder="e.g. Weekends and evenings"
                   value={formData.availability}
                   onChange={handleChange}
                 />
@@ -180,6 +189,7 @@ function Profile() {
                 <input
                   id="skillsOffered"
                   className="field-input"
+                  placeholder="e.g. Python, Canva, Excel"
                   value={formData.skillsOffered.join(", ")}
                   onChange={(e) =>
                     setFormData({
@@ -203,6 +213,7 @@ function Profile() {
                 <input
                   id="skillsWanted"
                   className="field-input"
+                  placeholder="e.g. Graphic design, Photography"
                   value={formData.skillsWanted.join(", ")}
                   onChange={(e) =>
                     setFormData({
@@ -225,11 +236,7 @@ function Profile() {
                 Save changes
               </button>
 
-              <button
-                type="button"
-                className="btn-soft"
-                onClick={handleCancel}
-              >
+              <button type="button" className="btn-soft" onClick={handleCancel}>
                 Cancel
               </button>
             </div>
@@ -243,53 +250,69 @@ function Profile() {
               Your intro to the SkillSwap community.
             </p>
 
-            <p className="info-text">{formData.bio}</p>
+            <p className="info-text">
+              {formData.bio ||
+                "You haven't added a bio yet. Tell the community a little about yourself!"}
+            </p>
 
             <div className="info-box">
               <p className="info-label">A little more</p>
               <p className="profile-tag">
-                {formData.location} • Beginner-friendly
+                {formData.location || "Location not added yet"}
               </p>
               <p className="info-text">{formData.email}</p>
             </div>
 
             <div className="info-section">
               <p className="info-label">Available to connect</p>
-              <p className="info-text">{formData.availability}</p>
+              <p className="info-text">
+                {formData.availability ||
+                  "Add your availability so members know when they can connect with you."}
+              </p>
             </div>
           </section>
 
           <div className="profile-column">
             <section className="ui-card">
               <h2 className="ui-card-title">Skills I can teach</h2>
-              <p className="ui-card-text">
-                Things I'm happy to share.
-              </p>
+              <p className="ui-card-text">Things I'm happy to share.</p>
 
-              {formData.skillsOffered.map((skill, index) => (
-                <div key={index} className="skill-row skill-row-teach">
-                  <span>{skill}</span>
-                  <span className="skill-level skill-level-teach">
-                    Confident
-                  </span>
-                </div>
-              ))}
+              {formData.skillsOffered.length > 0 ? (
+                formData.skillsOffered.map((skill, index) => (
+                  <div key={index} className="skill-row skill-row-teach">
+                    <span>{skill}</span>
+                    <span className="skill-level skill-level-teach">
+                      Confident
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <p className="ui-card-text">
+                  You haven't added any teaching skills yet. Add some to help
+                  people discover you.
+                </p>
+              )}
             </section>
 
             <section className="ui-card">
               <h2 className="ui-card-title">Skills I want to learn</h2>
-              <p className="ui-card-text">
-                Things I'm excited to pick up.
-              </p>
+              <p className="ui-card-text">Things I'm excited to pick up.</p>
 
-              {formData.skillsWanted.map((skill, index) => (
-                <div key={index} className="skill-row skill-row-learn">
-                  <span>{skill}</span>
-                  <span className="skill-level skill-level-learn">
-                    Beginner
-                  </span>
-                </div>
-              ))}
+              {formData.skillsWanted.length > 0 ? (
+                formData.skillsWanted.map((skill, index) => (
+                  <div key={index} className="skill-row skill-row-learn">
+                    <span>{skill}</span>
+                    <span className="skill-level skill-level-learn">
+                      Beginner
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <p className="ui-card-text">
+                  You haven't added any learning goals yet. Tell us what you'd
+                  like to learn.
+                </p>
+              )}
             </section>
           </div>
         </div>
@@ -299,4 +322,3 @@ function Profile() {
 }
 
 export default Profile;
-
