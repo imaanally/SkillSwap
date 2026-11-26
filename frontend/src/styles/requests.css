@@ -1,0 +1,142 @@
+
+/* Requests Page */
+
+.requests-page {
+  padding: 30px;
+  min-height: 100vh;
+  background-color: #f7f5fc;
+}
+
+.requests-page h1 {
+  font-size: 27px;
+  color: #29233e;
+  margin-bottom: 8px;
+}
+
+.requests-page > p {
+  color: #89839b;
+  font-size: 13px;
+}
+
+/* Request Tabs */
+
+.request-tabs {
+  display: flex;
+  gap: 12px;
+  margin: 30px 0 20px;
+  border-bottom: 1px solid #e7e2f0;
+}
+
+.request-tabs button {
+  padding: 12px 18px;
+  border: none;
+  background: transparent;
+  color: #89839b;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.request-tabs button.active-tab {
+  color: #704bd8;
+  border-bottom: 2px solid #704bd8;
+  font-weight: bold;
+}
+
+/* Request Cards */
+
+.requests-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.request-card {
+  background-color: white;
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid #eeeaf5;
+}
+
+.request-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.request-card-header h3 {
+  font-size: 14px;
+  color: #29233e;
+  margin-bottom: 5px;
+}
+
+.request-card-header span {
+  font-size: 11px;
+  color: #704bd8;
+  background: #eee8ff;
+  padding: 4px 9px;
+  border-radius: 20px;
+}
+
+/* Skills */
+
+.request-skills {
+  background: #f8f6fc;
+  padding: 13px;
+  border-radius: 10px;
+  margin-bottom: 14px;
+}
+
+.request-skills p {
+  font-size: 12px;
+  color: #777;
+  margin: 5px 0;
+}
+
+.request-skills strong {
+  color: #29233e;
+}
+
+.request-message {
+  font-size: 12px;
+  color: #89839b;
+  margin-bottom: 18px;
+}
+
+/* Action Buttons */
+
+.request-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.request-actions button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 9px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.request-actions button:first-child {
+  background: #704bd8;
+  color: white;
+}
+
+.request-actions button:last-child {
+  background: #f3effa;
+  color: #704bd8;
+}
+
+/* Responsive */
+
+@media (max-width: 700px) {
+  .requests-list {
+    grid-template-columns: 1fr;
+  }
+
+  .requests-page {
+    padding: 18px;
+  }
+}

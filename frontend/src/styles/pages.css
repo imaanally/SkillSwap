@@ -1,0 +1,110 @@
+@layer components {
+  /* ===== Auth pages: Login and Register ===== */
+  .auth-page { @apply grid min-h-screen lg:grid-cols-[2fr_3fr]; }
+  .auth-main { @apply flex items-center justify-center bg-white px-6 py-10; }
+  .auth-form { @apply w-full max-w-md; }
+  .auth-form-wide { @apply w-full max-w-2xl; }
+  .auth-title { @apply text-3xl font-bold text-ink; }
+  .auth-title-sm { @apply text-2xl font-bold text-ink; }
+  .auth-subtitle { @apply mt-2 text-sm text-gray-500; }
+  .auth-mascot { @apply mb-6 h-24 w-24; }
+  .auth-fields { @apply mt-8 space-y-5; }
+  .auth-grid { @apply mt-8 grid gap-5 sm:grid-cols-2; }
+  .auth-section { @apply mt-5; }
+  .auth-row { @apply flex items-center justify-between text-xs; }
+  .auth-remember { @apply flex items-center gap-2 text-gray-500; }
+  .auth-remember input { @apply accent-primary; }
+  .auth-link { @apply font-medium text-primary hover:underline; }
+  .auth-link-line { @apply mt-4 text-center text-xs; }
+  .auth-submit { @apply mt-6; }
+  .auth-alt-box { @apply mt-6 rounded-lg bg-surface p-4 text-center text-xs text-gray-500; }
+  .auth-legal { @apply mt-6 text-center text-[11px] text-gray-400; }
+  .role-heading { @apply mb-3 mt-6 text-xs font-medium text-ink; }
+  .role-grid { @apply grid gap-4 sm:grid-cols-2; }
+  .role-card { @apply rounded-xl border-2 border-transparent p-4 text-left; }
+  .role-card-teach { @apply bg-lavender; }
+  .role-card-learn { @apply bg-blush; }
+  .role-card-selected { @apply border-primary; }
+  .role-title { @apply text-xs font-semibold text-ink; }
+  .role-text { @apply mt-1 text-[11px] text-gray-500; }
+
+  /* ===== Dark side panel on the auth pages ===== */
+  .side-panel { @apply hidden flex-col justify-between bg-night p-10 text-white lg:flex; }
+  .side-logo { @apply flex items-center gap-2; }
+  .logo-mark { @apply flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-sm font-bold text-white; }
+  .logo-text { @apply font-semibold; }
+  .side-kicker { @apply mb-4 text-[10px] font-medium uppercase tracking-widest text-white/60; }
+  .side-headline { @apply text-4xl font-bold leading-tight; }
+  .side-text { @apply mt-4 text-sm text-white/70; }
+  .side-note { @apply mt-8 rounded-xl bg-night-soft p-4; }
+  .side-note-title { @apply text-sm font-semibold; }
+  .side-note-text { @apply mt-1 text-xs text-white/60; }
+  .side-skills { @apply mt-4 grid grid-cols-2 gap-3; }
+  .side-skill { @apply rounded-xl p-4 text-ink; }
+  .side-skill-name { @apply font-semibold; }
+  .side-skill-text { @apply text-xs text-ink/70; }
+  .side-footer { @apply h-3 text-[10px] uppercase tracking-widest text-white/50; }
+
+  /* ===== App shell: sidebar and top bar (Dashboard, Profile) ===== */
+  .shell { @apply flex min-h-screen bg-surface; }
+  .shell-sidebar { @apply hidden w-60 shrink-0 flex-col gap-6 bg-white p-5 text-ink md:flex; }
+  .shell-nav { @apply flex flex-col gap-1; }
+  .shell-link { @apply flex items-center gap-3 rounded-lg px-3 py-2.5 text-xs font-medium text-gray-500 hover:bg-surface; }
+  .shell-link-active { @apply bg-lavender text-primary hover:bg-lavender; }
+  .shell-icon { @apply w-4 text-center text-sm; }
+  .shell-tip { @apply mt-auto rounded-xl bg-lavender p-4; }
+  .shell-tip-title { @apply text-xs font-semibold text-ink; }
+  .shell-tip-text { @apply mt-1 text-[11px] leading-snug text-gray-500; }
+  .shell-tip-button { @apply mt-3 block rounded-lg bg-white py-2 text-center text-xs font-semibold text-primary; }
+  .shell-body { @apply min-w-0 flex-1 px-6 py-6 md:px-10; }
+  .shell-topbar { @apply relative mb-6 flex items-center justify-between text-[11px] text-gray-500; }
+  .avatar-button { @apply flex h-9 w-9 items-center justify-center rounded-xl bg-peach text-xs font-semibold text-ink; }
+  .account-menu { @apply absolute right-0 top-12 z-10 flex w-64 flex-col rounded-2xl bg-white p-5 text-ink shadow-lg; }
+  .account-name { @apply text-base font-semibold; }
+  .account-text { @apply mt-1 text-xs text-gray-500; }
+  .account-actions { @apply mt-4 flex flex-col gap-2; }
+  .page-title { @apply text-2xl font-bold text-ink; }
+  .page-subtitle { @apply mt-1 text-xs text-gray-500; }
+
+  /* ===== Dashboard ===== */
+  .banner { @apply mt-6 rounded-2xl bg-night p-7 text-white; }
+  .banner-kicker { @apply text-[10px] font-medium uppercase tracking-widest text-white/60; }
+  .banner-title { @apply mt-2 text-3xl font-bold; }
+  .banner-text { @apply mt-3 text-xs text-white/70; }
+  .banner-button { @apply mt-5 inline-block rounded-xl bg-mint px-5 py-2.5 text-xs font-semibold text-ink hover:opacity-90; }
+  .stats-grid { @apply mt-4 grid gap-4 md:grid-cols-3; }
+  .stat-card { @apply flex items-center gap-3 rounded-2xl bg-white p-4; }
+  .stat-badge { @apply flex h-10 w-10 items-center justify-center rounded-xl text-sm font-semibold text-ink; }
+  .stat-label { @apply text-xs font-semibold text-ink; }
+  .stat-hint { @apply text-[11px] text-gray-500; }
+  .dash-grid { @apply mt-4 grid gap-4 lg:grid-cols-2; }
+  .session-row { @apply mt-3 flex items-center justify-between rounded-xl bg-surface p-4; }
+  .session-when { @apply text-[10px] font-semibold uppercase text-primary; }
+  .session-title { @apply text-sm font-semibold text-ink; }
+  .session-with { @apply text-[11px] text-gray-500; }
+  .person-row { @apply mt-3 flex items-center gap-3; }
+  .person-avatar { @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xs font-semibold text-ink; }
+  .person-info { @apply flex-1; }
+  .person-name { @apply text-xs font-semibold text-ink; }
+  .person-skill { @apply text-[11px] text-gray-500; }
+
+  /* ===== Profile ===== */
+  .profile-head { @apply mt-6 flex items-center justify-between gap-4 rounded-2xl bg-white p-6; }
+  .profile-id { @apply flex items-center gap-4; }
+  .profile-avatar { @apply flex h-14 w-14 items-center justify-center rounded-xl bg-mint text-lg font-semibold text-success; }
+  .profile-name { @apply text-lg font-bold text-ink; }
+  .profile-tag { @apply text-[11px] font-medium text-primary; }
+  .profile-meta { @apply mt-1 text-[11px] text-gray-500; }
+  .profile-grid { @apply mt-4 grid gap-4 lg:grid-cols-2; }
+  .profile-column { @apply flex flex-col gap-4; }
+  .info-box { @apply mt-4 rounded-xl bg-surface p-4; }
+  .info-section { @apply mt-4; }
+  .info-label { @apply text-xs font-semibold text-ink; }
+  .info-text { @apply mt-1 text-xs leading-relaxed text-gray-600; }
+  .skill-row { @apply mt-3 flex items-center justify-between rounded-xl px-4 py-3 text-xs font-medium text-ink; }
+  .skill-row-teach { @apply bg-mint-soft; }
+  .skill-row-learn { @apply bg-lavender; }
+  .skill-level { @apply text-[10px] font-medium; }
+  .skill-level-teach { @apply text-success; }
+  .skill-level-learn { @apply text-primary; }
+}

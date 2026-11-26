@@ -1,0 +1,157 @@
+
+from typing import Literal
+from datetime import datetime
+
+from pydantic import (
+    BaseModel,
+    EmailStr,
+    ConfigDict,
+    Field,
+    model_validator,
+)
+
+
+# Authentication schemas
+
+class UserCreate(BaseModel):
+    name: str = Field(min_length=1, max_length=100)
+    email: EmailStr
+    password: str = Field(min_length=8)
+    bio: str | None = None
+
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+
+class UserOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    name: str
+    email: EmailStr
+    bio: str | None = None
+
+
+# Skills schemas
+
+class SkillOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    name: str
+    description: str | None = None
+
+
+class UserSkillCreate(BaseModel):
+    skill_id: int
+    type: Literal["teach", "learn"]
+
+
+class UserSkillOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    user_id: int
+    type: str
+    skill: SkillOut
+
+class MarketplaceUserOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    name: str
+    bio: str | None = None
+    user_skills: list[UserSkillOut] = []
+
+
+# Token and user update schemas
+
+class TokenOut(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    user: UserOut
+
+
+class UserUpdate(BaseModel):
+    name: str | None = Field(default=None, min_length=1, max_length=100)
+    bio: str | None = None
+
+
+# Exchange request schemas
+
+class ExchangeRequestCreate(BaseModel):
+    receiver_id: int
+    offered_skill_id: int
+    requested_skill_id: int
+    message: str | None = None
+
+    @model_validator(mode="after")
+    def validate_skills(self):
+        if self.offered_skill_id == self.requested_skill_id:
+            raise ValueError("Offered and requested skills must be different")
+        return self
+
+
+class ExchangeRequestUpdate(BaseModel):
+    status: Literal["accepted", "rejected"]
+
+
+class ExchangeRequestResponse(BaseModel):
+    id: int
+    sender_id: int
+    receiver_id: int
+    offered_skill_id: int
+    requested_skill_id: int
+    status: str
+    message: str | None = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+# Learning session schemas
+
+class SessionCreate(BaseModel):
+    exchange_request_id: int
+    scheduled_at: datetime
+    duration_minutes: int = Field(default=60, gt=0)
+    meeting_link: str | None = None
+    notes: str | None = None
+
+
+class SessionResponse(BaseModel):
+    id: int
+    exchange_request_id: int
+    teacher_id: int
+    learner_id: int
+    scheduled_at: datetime
+    duration_minutes: int
+    meeting_link: str | None = None
+    notes: str | None = None
+    status: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class SessionUpdate(BaseModel):
+    status: Literal["completed", "cancelled"]
+
+
+# Review schemas
+
+class ReviewCreate(BaseModel):
+    session_id: int
+    rating: int = Field(ge=1, le=5)
+    comment: str | None = None
+
+
+class ReviewResponse(BaseModel):
+    id: int
+    session_id: int
+    reviewer_id: int
+    reviewee_id: int
+    rating: int
+    comment: str | None = None
+
+    model_config = ConfigDict(from_attributes=True)
