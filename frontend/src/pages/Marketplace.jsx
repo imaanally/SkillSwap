@@ -1,88 +1,58 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SkillCard from "../components/SkillCard";
-import { useAuth } from "../context/AuthContext";
-import { apiRequest } from "../services/api";
 import "../styles/marketplace.css";
 
 function Marketplace() {
-  const { user } = useAuth();
-
-  const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All categories");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
-  useEffect(() => {
-    let cancelled = false;
+  const people = [
+    {
+      id: 1,
+      name: "Amina Mohamed",
+      teachSkill: "Graphic Design",
+      learnSkill: "Python",
+    },
+    {
+      id: 2,
+      name: "Hassan K.",
+      teachSkill: "Python",
+      learnSkill: "Excel",
+    },
+    {
+      id: 3,
+      name: "Mika K.",
+      teachSkill: "Photography",
+      learnSkill: "Canva",
+    },
+    {
+      id: 4,
+      name: "Fatima A.",
+      teachSkill: "Baking",
+      learnSkill: "Marketing",
+    },
+    {
+      id: 5,
+      name: "Yusuf O.",
+      teachSkill: "Excel",
+      learnSkill: "Photography",
+    },
+    {
+      id: 6,
+      name: "Sara N.",
+      teachSkill: "Illustration",
+      learnSkill: "Arabic",
+    },
+  ];
 
-    async function fetchUsers() {
-      try {
-        setLoading(true);
-        setError("");
-
-        const data = await apiRequest("/api/users");
-
-        if (!cancelled) {
-          setUsers(data);
-        }
-      } catch (err) {
-        if (!cancelled) {
-          setError(err.message);
-        }
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
-      }
-    }
-
-    fetchUsers();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  const otherMembers = users
-    .filter((member) => member.id !== user?.id)
-    .map((member) => {
-      const teachingSkills =
-        member.user_skills
-          ?.filter((item) => item.type === "teach")
-          .map((item) => item.skill.name) || [];
-
-      const learningSkills =
-        member.user_skills
-          ?.filter((item) => item.type === "learn")
-          .map((item) => item.skill.name) || [];
-
-      return {
-        id: member.id,
-        name: member.name,
-        bio: member.bio,
-        teachingSkills,
-        learningSkills,
-        teachSkill: teachingSkills.join(", ") || "No teaching skills added yet",
-        learnSkill: learningSkills.join(", ") || "No learning skills added yet",
-        location: member.location || "Location not added",
-      };
-    });
-
-  const filteredPeople = otherMembers.filter((person) => {
-    const searchTerm = search.toLowerCase();
-
+  const filteredPeople = people.filter((person) => {
     const matchesSearch =
-      person.name.toLowerCase().includes(searchTerm) ||
-      person.teachingSkills.some((skill) =>
-        skill.toLowerCase().includes(searchTerm),
-      ) ||
-      person.learningSkills.some((skill) =>
-        skill.toLowerCase().includes(searchTerm),
-      );
+      person.name.toLowerCase().includes(search.toLowerCase()) ||
+      person.teachSkill.toLowerCase().includes(search.toLowerCase()) ||
+      person.learnSkill.toLowerCase().includes(search.toLowerCase());
 
     const matchesCategory =
-      category === "All categories" || person.teachingSkills.includes(category);
+      category === "All categories" || person.teachSkill === category;
 
     return matchesSearch && matchesCategory;
   });
@@ -94,6 +64,7 @@ function Marketplace() {
       </p>
 
       <h1>Find your next skill swap</h1>
+
       <p>Search for a skill, meet a person, start learning.</p>
 
       <div className="marketplace-search">
@@ -114,14 +85,11 @@ function Marketplace() {
           <option>Illustration</option>
         </select>
 
-        <button type="button" onClick={() => setSearch(search.trim())}>
-          Search
-        </button>
+        <button type="button">Search</button>
       </div>
 
       <div className="marketplace-heading">
-        <h2>People to learn with</h2>
-
+        <h2>A few people to learn with</h2>
         <button
           type="button"
           onClick={() => {
@@ -134,18 +102,17 @@ function Marketplace() {
       </div>
 
       <div className="skill-card-grid">
-        {loading ? (
-          <p>Finding SkillSwap members...</p>
-        ) : error ? (
-          <p>Couldn't load members: {error}</p>
-        ) : filteredPeople.length > 0 ? (
+        {filteredPeople.length > 0 ? (
           filteredPeople.map((person) => (
-            <SkillCard key={person.id} person={person} />
+            <SkillCard
+              key={person.id}
+              name={person.name}
+              teachSkill={person.teachSkill}
+              learnSkill={person.learnSkill}
+            />
           ))
-        ) : otherMembers.length === 0 ? (
-          <p>No other members yet. Invite your teammates to join SkillSwap!</p>
         ) : (
-          <p>No matching members found. Try another search.</p>
+          <p>No matching people found.</p>
         )}
       </div>
     </div>
